@@ -24,7 +24,7 @@
 
 		(function() {
 			var detector = function() {
-				var num = input.value;
+				var num = parseInt(input.value);
 				var pollutionClass = function () {
 					switch (true) {
 						case num >= 0 && num <= 50:
@@ -47,12 +47,15 @@
 							break;
 					}
 				};
-				if (!num == '' && num >= 0 && num <= 500) {
-					output.innerHTML = input.value + " （污染等级： " + pollutionClass() + "）";
+				
+				if (isNaN(num)) {
+					alert("请输入整数数值")
+					warning.innerHTML = "*输入数值应为0~500之间"
+				} else if(num >= 0 && num <= 500) {
+					output.innerHTML = num + " （污染等级： " + pollutionClass() + "）";
 					warning.innerHTML = "";
 				} else {
-					alert("您输入的AQI指数 " + input.value + " 为无效值，请重新输入。");
-					warning.innerHTML = "*输入数值应为0~500之间"
+					alert("您输入的AQI指数 " + num + " 为无效值，请重新输入。");
 					output.innerHTML = "尚无录入";
 				}
 			};
