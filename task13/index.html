@@ -12,6 +12,7 @@
 
 	<label>请输入沈阳今天天气质量： <input type="text" id="aqi-input"></label>
 	<button id="button">确认填写</button>
+	<span id="warning" style="color:red;"></span>
 
 	<div>您输入的值是：<span id="aqi-display">尚无录入</span></div>
 
@@ -19,18 +20,55 @@
 		var input = document.getElementById('aqi-input');
 		var button = document.getElementById('button');
 		var output = document.getElementById('aqi-display');
+		var warning = document.getElementById('warning');
 
 		(function() {
-			button.onclick = function() {
-				if (input.value) {
-					output.innerHTML = input.value;
+			var detector = function() {
+				var num = input.value;
+				// console.log(typeof(num));
+				var pollutionClass = function () {
+					switch (true) {
+						case num >= 0 && num <= 50:
+							return "优";
+							break;
+						case num > 50 && num <= 100:
+							return "良";
+							break;
+						case num > 100 && num <= 150:
+							return "轻度污染";
+							break;
+						case num > 150 && num <= 200:
+							return "中度污染";
+							break;
+						case num > 200 && num <= 300:
+							return "重度污染";
+							break;
+						case num > 300 && num <= 500:
+							return "严重污染";
+							break;
+					}
+				};
+				if (!num == '' && num >= 0 && num <= 500) {
+					output.innerHTML = input.value + " （污染等级： " + pollutionClass() + "）";
+					warning.innerHTML = "";
 				} else {
-					alert('请输入答案');
+					alert("您输入的AQI指数 " + input.value + " 为无效值，请重新输入。");
+					warning.innerHTML = "*输入数值应为0~500之间"
 					output.innerHTML = "尚无录入";
+				}
+			};
+
+			button.onclick = function() {
+				detector();
+			};
+			
+			input.onkeypress = function(event) {
+				var x = event.keyCode;
+				if(x == 13) {
+					detector();
 				}
 			}
 		})();
-
 	</script>
 </body>
 
